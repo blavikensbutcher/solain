@@ -1,7 +1,7 @@
 use crate::{errors::WorkoutError, states::*};
 use anchor_lang::prelude::*;
 
-pub fn delete_workout(ctx: Context<DeleteWorkout>, _workout_id: u64) -> Result<()> {
+pub fn delete_workout(ctx: Context<DeleteWorkout>, workout_id: u64) -> Result<()> {
     Ok(())
 }
 

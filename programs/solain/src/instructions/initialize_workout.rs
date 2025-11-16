@@ -1,7 +1,6 @@
-use anchor_lang::prelude::*;
-
 use crate::errors::WorkoutError;
 use crate::states::*;
+use anchor_lang::prelude::*;
 
 pub fn initialize_workout(
     ctx: Context<InitializeWorkout>,
@@ -14,6 +13,11 @@ pub fn initialize_workout(
     difficulty: u8,
     category: String,
 ) -> Result<()> {
+    let config = &mut ctx.accounts.config;
+
+    if workout_id != config.next_workout_id {
+        return Err(WorkoutError::InvalidWorkoutId.into());
+    }
     if name.as_bytes().len() > WORKOUT_NAME_LENGTH {
         return err!(WorkoutError::WorkoutNameTooLong);
     }
@@ -26,7 +30,7 @@ pub fn initialize_workout(
         return err!(WorkoutError::InvalidDifficulty);
     }
 
-    let workout: &mut Account<'_, Workout> = &mut ctx.accounts.workout;
+    let workout = &mut ctx.accounts.workout;
 
     workout.workout_id = workout_id;
     workout.name = name;
@@ -39,24 +43,39 @@ pub fn initialize_workout(
     workout.category = category;
     workout.bump = ctx.bumps.workout;
 
+    config.next_workout_id += 1;
+    config.total_workouts += 1;
+
+    msg!("Workout #{} created: {}", workout_id, workout.name);
+
     Ok(())
 }
 
 #[derive(Accounts)]
 #[instruction(workout_id: u64)]
 pub struct InitializeWorkout<'info> {
+    #[account(
+        mut,
+        seeds = [b"config"],
+        bump = config.bump
+    )]
+    pub config: Account<'info, ProgramConfig>,
+
     #[account(mut)]
     pub workout_authority: Signer<'info>,
+
     #[account(
         init,
         payer = workout_authority,
         space = 8 + Workout::INIT_SPACE,
         seeds = [
-            b"workout", 
+            b"workout",
             workout_authority.key().as_ref(),
-            &workout_id.to_le_bytes()],
+            &workout_id.to_le_bytes()
+        ],
         bump
-     )]
+    )]
     pub workout: Account<'info, Workout>,
+
     pub system_program: Program<'info, System>,
 }

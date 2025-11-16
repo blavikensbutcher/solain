@@ -12,7 +12,7 @@ solain = "2BqFVR96CLqZ6AHue5FbUCXFk4zdiASaoL97wND53BT3"
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "localnet"
+cluster = "Devnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]

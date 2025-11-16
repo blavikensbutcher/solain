@@ -10,4 +10,6 @@ pub enum WorkoutError {
     Unauthorized,
     #[msg("Difficulty should be between 1 and 10")]
     InvalidDifficulty,
+    #[msg("Invalid workout ID")]
+    InvalidWorkoutId,
 }

@@ -3,7 +3,7 @@ use anchor_lang::prelude::*;
 
 pub fn update_workout(
     ctx: Context<UpdateWorkout>,
-    workout_id: u64,
+    _workout_id: u64,
     name: Option<String>,
     reps: Option<u16>,
     sets: Option<u8>,

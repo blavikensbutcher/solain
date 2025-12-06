@@ -12,4 +12,6 @@ pub enum WorkoutError {
     InvalidDifficulty,
     #[msg("Invalid workout ID")]
     InvalidWorkoutId,
+    #[msg("Arithmetic overflow")]
+    Overflow,
 }

@@ -1,14 +1,14 @@
 use anchor_lang::prelude::*;
 
-pub const WORKOUT_NAME_LENGTH: usize = 16;
-pub const WORKOUT_CATEGORY_LENGTH: usize = 10;
+pub const WORKOUT_NAME_LENGTH: usize = 64; 
+pub const WORKOUT_CATEGORY_LENGTH: usize = 20;
 
 #[account]
 #[derive(InitSpace)]
 pub struct Workout {
     pub workout_id: u64,
     pub workout_author: Pubkey,
-    #[max_len(32)]
+    #[max_len(64)]
     pub name: String,
     pub reps: u16,
     pub sets: u8,

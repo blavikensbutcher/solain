@@ -1,4 +1,4 @@
-use crate::{states::*};
+use crate::states::*;
 use anchor_lang::prelude::*;
 
 pub fn update_measurements(
@@ -12,7 +12,7 @@ pub fn update_measurements(
     bicep_cm: Option<u16>,
 ) -> Result<()> {
     let profile = &mut ctx.accounts.user_profile;
-    
+
     if let Some(weight) = weight_kg {
         profile.weight_kg = weight;
     }
@@ -34,9 +34,9 @@ pub fn update_measurements(
     if let Some(bicep) = bicep_cm {
         profile.bicep_cm = bicep;
     }
-    
+
     profile.last_updated = Clock::get()?.unix_timestamp;
-    
+
     msg!("Measurements updated for: {:?}", profile.user);
     Ok(())
 }
@@ -53,6 +53,6 @@ pub struct UpdateMeasurements<'info> {
         has_one = user
     )]
     pub user_profile: Account<'info, UserProfile>,
-    
+
     pub user: Signer<'info>,
 }

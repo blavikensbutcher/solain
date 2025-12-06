@@ -44,31 +44,38 @@ pub fn initialize_workout(
     workout.category = category;
     workout.timestamp = clock.unix_timestamp;
     workout.bump = ctx.bumps.workout;
+    workout.weight_lifted = weight_lifted;
 
     // Update user profile statistics
     let profile = &mut ctx.accounts.user_profile;
-    
-    profile.total_workouts = profile.total_workouts.checked_add(1)
+
+    profile.total_workouts = profile
+        .total_workouts
+        .checked_add(1)
         .ok_or(WorkoutError::Overflow)?;
-    
-    profile.workouts_this_week = profile.workouts_this_week.checked_add(1)
+
+    profile.workouts_this_week = profile
+        .workouts_this_week
+        .checked_add(1)
         .ok_or(WorkoutError::Overflow)?;
-    
-    profile.workouts_this_month = profile.workouts_this_month.checked_add(1)
+
+    profile.workouts_this_month = profile
+        .workouts_this_month
+        .checked_add(1)
         .ok_or(WorkoutError::Overflow)?;
-    
+
     // Update personal records
     if calories > profile.max_calories_session {
         profile.max_calories_session = calories;
     }
-    
+
     if let Some(weight) = weight_lifted {
         if weight > profile.heaviest_weight_lifted {
             profile.heaviest_weight_lifted = weight;
             msg!("New PR! Weight lifted: {}g", weight);
         }
     }
-    
+
     profile.last_workout_date = clock.unix_timestamp;
     profile.last_updated = clock.unix_timestamp;
 
@@ -111,7 +118,7 @@ pub struct InitializeWorkout<'info> {
         bump
     )]
     pub workout: Account<'info, Workout>,
-    
+
     #[account(
         mut,
         seeds = [

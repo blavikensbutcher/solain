@@ -10,7 +10,6 @@ pub use errors::*;
 pub use instructions::*;
 pub use states::*;
 
-
 #[program]
 pub mod solain {
     use super::*;
@@ -120,14 +119,7 @@ pub mod solain {
         bicep_cm: Option<u16>,
     ) -> Result<()> {
         instructions::update_measurements::update_measurements(
-            ctx,
-            weight_kg,
-            chest_cm,
-            waist_cm,
-            hips_cm,
-            thigh_cm,
-            neck_cm,
-            bicep_cm,
+            ctx, weight_kg, chest_cm, waist_cm, hips_cm, thigh_cm, neck_cm, bicep_cm,
         )
     }
 

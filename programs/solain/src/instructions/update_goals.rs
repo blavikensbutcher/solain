@@ -1,4 +1,4 @@
-use crate::{states::*};
+use crate::states::*;
 use anchor_lang::prelude::*;
 
 pub fn update_goals(
@@ -8,7 +8,7 @@ pub fn update_goals(
     daily_calorie_goal: Option<u16>,
 ) -> Result<()> {
     let profile = &mut ctx.accounts.user_profile;
-    
+
     if let Some(target) = target_weight_kg {
         profile.target_weight_kg = target;
     }
@@ -18,9 +18,9 @@ pub fn update_goals(
     if let Some(calorie_goal) = daily_calorie_goal {
         profile.daily_calorie_goal = calorie_goal;
     }
-    
+
     profile.last_updated = Clock::get()?.unix_timestamp;
-    
+
     msg!("Goals updated for: {:?}", profile.user);
     Ok(())
 }
@@ -37,6 +37,6 @@ pub struct UpdateGoals<'info> {
         has_one = user
     )]
     pub user_profile: Account<'info, UserProfile>,
-    
+
     pub user: Signer<'info>,
 }
